@@ -1,0 +1,94 @@
+name: update-readme-with-commits
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false 
+
+      - name: Check if commit is from GitHub Actions bot
+        run: |
+          # Check if the actor is a bot (contains 'bot' in the username)
+          if [[ "${{ github.actor }}" =~ .*bot.* ]]; then
+            echo "Skipping workflow run because the commit was made by a bot."
+            exit 0
+          fi
+
+
+      - name: Fetch commit details
+        id: get-commits
+        run: |
+          echo "Checking commits... branch(${{ github.ref_name }})"
+          
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+          # Fetch all commits from the branch
+          commit_details=$(git log --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+          else
+          # Fetch commit details between previous and current push
+          commit_details=$(git log "${{ github.event.before }}..${{ github.sha }}" --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+          fi
+
+          # Create the table header
+          formatted_commit_details=$(echo "$commit_details" | awk '{print "| ["$1"](https://github.com/${{ github.repository }}/commit/"$1") | "$3" | "$2" | \\n"}')
+
+          echo "commit_hashes=$(echo "$commit_details" | awk '{print "["$1"](https://github.com/${{ github.repository }}/commit/"$1")"}' | paste -sd, -)" >> "$GITHUB_OUTPUT"
+          echo "commit_details=${formatted_commit_details}" >> "$GITHUB_OUTPUT"
+      
+      - name: commit logs
+        run: |
+          echo "## commit ${commit_hashes} \n" >> commits_log.md
+          echo "| commit | date | message | \n| :--: | :--: | :-- | \n" >> commits_log.md
+          echo -e "${commit_details}" >> commits_log.md
+
+      - name: Check for placeholder in README.md
+        run: |
+          # Check if the placeholder exists
+          if ! grep -q 'replacewithcurrentcommit' README.md; then
+            echo "Error: Placeholder 'replacewithcurrentcommit' not found in README.md"
+            exit 1
+          fi
+
+      - name: Replace placeholder in README.md
+        run: |
+          commit_hashes="${{ steps.get-commits.outputs.commit_hashes }}"
+          commit_details="${{ steps.get-commits.outputs.commit_details }}"
+          
+          # Replace the placeholder with commit details
+          sed -i "s/replacewithcurrentcommit/${commit_hashes}\\n|commit|date|message|\\n|:--:|:--:|:--|\\n${commit_details}/g" README.md
+
+      - name: Verify all placeholders are replaced in README.md
+        run: |
+          # Ensure all placeholders are replaced
+          remaining_placeholders=$(grep -c 'replacewithcurrentcommit' README.md)
+          if [ "$remaining_placeholders" -gt 0 ]; then
+            echo "Error: Not all instances of 'replacewithcurrentcommit' were replaced."
+            exit 1
+          fi
+
+      - name: Configure Git
+        run: |
+          git config --local user.name "update-readme"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "commit-logs[bot]"
+          git commit -a -m "Add changes"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
