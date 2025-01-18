@@ -28,11 +28,18 @@ jobs:
           echo "Checking commits... branch(${{ github.ref_name }})"
           
           if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
-          # Fetch all commits from the branch
-          commit_details=$(git log --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+            # Fetch all commits from the branch
+            commit_details=$(git log --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
           else
-          # Fetch commit details between previous and current push
-          commit_details=$(git log "${{ github.event.before }}..${{ github.sha }}" --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+            # Test if the commits are consecutive
+            is_consecutive=$(git rev-list --count "${{ github.event.before }}..${{ github.sha }}")
+            if [ "$is_consecutive" -eq 1 ]; then
+              # Use only the current commit
+              commit_details=$(git log -1 --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+            else
+              # Fetch commit details between previous and current push
+              commit_details=$(git log "${{ github.event.before }}..${{ github.sha }}" --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+            fi
           fi
 
           # Create the table header
@@ -61,7 +68,10 @@ jobs:
           commit_details="${{ steps.get-commits.outputs.commit_details }}"
           
           # Replace the placeholder with commit details
-          sed -i "s/replacewithcurrentcommit/${commit_hashes}\\n|commit|date|message|\\n|:--:|:--:|:--|\\n${commit_details}/g" README.md
+          commit="${commit_hashes} \n|commit|date|message| \n|:--:|:--:|:--| \n${commit_details}"
+          echo "${commit}"
+          sed -ie "s!replacewithcurrentcommit!${commit}!g" README.md
+
 
       - name: Verify all placeholders are replaced in README.md
         run: |
@@ -74,7 +84,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --local user.name "update-readme"
+          git config --local user.name "update-readme[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Commit and push changes
@@ -92,3 +102,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
+#litu change
