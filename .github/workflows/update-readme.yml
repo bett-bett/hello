@@ -34,14 +34,19 @@ jobs:
             commit_details=$(git log --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
             echo commit_details
           else
+            
             # Test if the commits are consecutive
+            
             is_consecutive=$(git rev-list --count "${{ github.event.before }}..${{ github.sha }}")
+            echo ${{github.event.before}}
             echo "****consecutive?"
             echo "${{ github.event.before }}..${{ github.sha }}"
             echo ${is_consecutive}
             echo "****details"
             echo git log "${{ github.event.before }}..${{ github.sha }}" --oneline --no-merges --pretty=format:"%h %s %ad" --date=short
+            
             if [ "$is_consecutive" -eq 1 ]; then
+              
               # Use only the current commit
               echo "****one commit"
               commit_details=$(git log -1 --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
