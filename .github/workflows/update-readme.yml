@@ -30,16 +30,22 @@ jobs:
           
           if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
             # Fetch all commits from the branch
+            echo "****first commit"
             commit_details=$(git log --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+            echo commit_details
           else
             # Test if the commits are consecutive
             is_consecutive=$(git rev-list --count "${{ github.event.before }}..${{ github.sha }}")
             if [ "$is_consecutive" -eq 1 ]; then
               # Use only the current commit
+              echo "****one commit"
               commit_details=$(git log -1 --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+              echo commit_details
             else
               # Fetch commit details between previous and current push
+              echo "****commits between push"
               commit_details=$(git log "${{ github.event.before }}..${{ github.sha }}" --oneline --no-merges --pretty=format:"%h %s %ad" --date=short)
+              echo commit_details
             fi
           fi
 
@@ -80,7 +86,8 @@ jobs:
           remaining_placeholders=$(grep -c 'replacewithcurrentcommit' README.md)
           if [ "$remaining_placeholders" -gt 0 ]; then
             echo "Error: Not all instances of 'replacewithcurrentcommit' were replaced."
-            print(README.md)
+            echo "*****File Readme.md*****"
+            echo cat README.md
             exit 1
           fi
 
