@@ -69,7 +69,7 @@ jobs:
           commit_details="${{ steps.get-commits.outputs.commit_details }}"
           
           # Replace the placeholder with commit details
-          commit="${commit_hashes} \n|commit|date|message| \n|:--:|:--:|:--| \n${commit_details}"
+          commit="${commit_details} \n|commit|date|message| \n|:--:|:--:|:--| \n${commit_details}"
           echo "${commit}"
           sed -ie "s!replacewithcurrentcommit!${commit}!g" README.md
 
