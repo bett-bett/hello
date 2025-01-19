@@ -80,6 +80,7 @@ jobs:
           remaining_placeholders=$(grep -c 'replacewithcurrentcommit' README.md)
           if [ "$remaining_placeholders" -gt 0 ]; then
             echo "Error: Not all instances of 'replacewithcurrentcommit' were replaced."
+            print(README.md)
             exit 1
           fi
 
