@@ -1,9 +1,3 @@
-#root {
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -38,4 +32,97 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.main {
+  padding : 20px
+}
+.main-heading{
+    position: relative;
+    display: inline-block;
+    display: table-cell;
+    padding: 20px 0 20px;
+    margin: 0;
+    overflow: hidden;
+    font-weight: 450;
+    font-size: 2.02em;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+nav {
+  width: 100%;
+}
+
+
+.main-nav ul {
+  list-style-type: none;
+  padding: 0 ;
+  display: flex;
+  font-size: 15px;
+  width: 100%;
+  margin-top: 0;
+}
+
+
+.main-body {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+
+.main-nav li {
+  display: flex;
+  padding: 0.5em;
+  text-align: center;
+}
+
+.body {
+  box-sizing: border-box;
+  text-rendering: geometricPrecision;
+  border: 1px solid #727578;
+  padding: 10px;
+  max-width: 100%;
+  word-wrap: break-word;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+  .main-nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .main-nav li {
+    width: 100%;
+    padding: 0.29em;
+    text-align: left;
+  }
+  .logo {
+    height: 4em;
+    padding: 1em;
+  }
+
+  .card {
+    padding: 1em;
+  }
+
+  .main {
+    padding: 10px;
+  }
+
+  .body {
+    padding: 5px;
+  }
 }
