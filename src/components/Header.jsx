@@ -13,6 +13,7 @@ function Header() {
         <ul>
           <li><Link to="/">landing page (Hello)</Link></li>
           <li><Link to="/about">Here and Now (About)</Link></li>
+          <li><Link to="/edu">Learning (Data Vault)</Link></li>
         </ul>
       </nav>
     </div>

@@ -101,7 +101,13 @@ nav {
   bottom: 20px;
 }
 
-
+.main-edu {
+  border-top: 1px solid #242424 ;
+  border-bottom: 1px solid #242424 ;
+  border-right: 1px solid #242424 ;
+  margin: -11px;
+  padding: 21px;
+}
 
 
 

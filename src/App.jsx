@@ -8,6 +8,8 @@ import About from './pages/About';
 import Count from './pages/Count';
 import Hello from './pages/Hello';
 import HomeLayout from './layout/HomeLayout';
+import Learning from './pages/Learning';
+
 
 function App() {
   
@@ -24,6 +26,7 @@ function App() {
               <Route path="/about" element={<About/>} />
               <Route path="/count" element={<Count/>} />
               <Route path="/" element={<Hello/>} />
+              <Route path="/edu" element={<Learning/>} />
             </Routes>
           </div>
         </div>
