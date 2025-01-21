@@ -68,7 +68,7 @@ nav {
 }
 
 
-.main-body {
+.count-body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -82,6 +82,7 @@ nav {
 .main-nav li {
   display: flex;
   padding: 0.5em;
+  padding-right: 1em;
   text-align: center;
 }
 
@@ -93,6 +94,26 @@ nav {
   max-width: 100%;
   word-wrap: break-word;
 }
+
+.main-tool {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

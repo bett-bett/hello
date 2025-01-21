@@ -2,12 +2,12 @@ import './App.css'
 import {
   BrowserRouter as Router,
   Routes,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import About from './pages/About';
 import Count from './pages/Count';
 import Hello from './pages/Hello';
+import HomeLayout from './layout/HomeLayout';
 
 function App() {
   
@@ -15,15 +15,8 @@ function App() {
     <>
       <Router>
         <div className='main'>
-          <h1 className='main-heading'>
-            Bryan's Website
-          </h1>
-          <nav className='main-nav'>
-            <ul>
-              <li><Link to="/">landing page (Hello)</Link></li>
-              <li><Link to="/about">Here and Now (About)</Link></li>
-            </ul>
-          </nav>
+          <HomeLayout />
+
           <div className="body">
             {/* A <Routes> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}

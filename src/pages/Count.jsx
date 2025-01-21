@@ -12,7 +12,7 @@ function Count() {
    
   return (
     <>
-      <div className='main-body'>
+      <div className='count-body'>
         <h2 style={{cursor: "pointer"}} onClick={() => setStarter(showStarter => !showStarter)}>
           Normal React starter code ↓
         </h2>
@@ -21,7 +21,7 @@ function Count() {
               ? <></>
               :
             (  
-            <div className='main-starter'>
+            <div>
 
             <div className="card">
               <button onClick={() => setCount((count) => count + 1)}>
