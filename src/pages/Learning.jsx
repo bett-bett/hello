@@ -1,32 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Learning() {
   const [flexDirection, setFlexDirection] = useState('row');
   const [justifyContent, setJustifyContent] = useState('flex-start');
   const [alignItems, setAlignItems] = useState('stretch');
+  const [axis, setAxis] = useState('?');
 
-  const boxStyle = {
+
+  const FlexBoxExperiment = {
     display: 'flex',
     flexDirection,
     justifyContent,
     alignItems,
     border: '1px solid',
-    backgroundColor: '#2424',
+    backgroundColor: '#22442244',
     height: '300px',
     padding: '10px',
+    boxShadow: '0 0 8px 6px rgba(34, 68, 34, 0.5)',
   }
 
-  const arrowStyle = {
-    position: "absolute",
-    left: "50%",
-    width: "0",
-    height: "0",
-    borderLeft: "10px solid transparent",
-    borderRight: "10px solid transparent",
-    borderTop: "10px solid #f9f9f9",
-    whiteSpace: "nowrap",
-
-  };
 
   const boxItem = {
     border: '1px solid',
@@ -36,21 +28,40 @@ function Learning() {
     borderRadius: '5px',
     cursor: 'pointer',
   }
+
+  const codeContainer = {
+    whiteSpace: "pre-wrap", 
+    wordWrap: "break-word",
+    backgroundColor: "#2d2d2d",
+    color: "#f8f8f8",
+    borderRadius: "3px",
+    padding: "12px 9px",
+    fontSize: "14px",
+    lineHeight: "1.3",
+    boxShadow: 'inset 0 0 15px 2px rgba(34, 68, 34, 0.4)',
+  }
+  useEffect(() => {
+    if (flexDirection == "row") {setAxis('→')}
+    else if (flexDirection == "row-reverse") {setAxis('←')}
+    else if (flexDirection == "column") {setAxis('↓')}
+    else if (flexDirection == "column-reverse") {setAxis('↑')}
+    else {setAxis('?')}
+  }),[flexDirection]
   
   return (
     <div className="main-edu">
       <h2>Flexbox Demonstration</h2>
       <p>CSS Flexible Box Layout module (Flexbox) arranges a group of items along a primary axis</p>
-      
-      <p>Experiment with Flexbox properties below. The </p>
-      <div style={boxStyle}>
-        <div style={arrowStyle}></div>
+      <br></br>
+      <p>| Experiment with Flexbox properties below:</p>
+        <p> | Primary axis {axis}</p>
+      <div style={FlexBoxExperiment}>
         <div style={boxItem}>Hello</div>
         <div style={boxItem}>internet</div>
         <div style={boxItem}>people</div>
       </div>
 
-      <div style={{ display:'flex',  justifyContent:'space-between', flexDirection:'row', marginTop: '5px', marginBottom: '30px' }}>
+      <div style={{ display:'flex',  justifyContent:'space-around', flexDirection:'row', marginTop: '6px'}}>
         <label>
           <strong>Flex Direction: </strong>
           <select value={flexDirection} onChange={(e) => setFlexDirection(e.target.value)}>
@@ -61,7 +72,7 @@ function Learning() {
           </select>
         </label>
       
-        <label style={{  }}>
+        <label >
           <strong>Justify Content: </strong>
           <select value={justifyContent} onChange={(e) => setJustifyContent(e.target.value)}>
             <option value="flex-start">Flex-Start</option>
@@ -73,7 +84,7 @@ function Learning() {
           </select>
         </label>
 
-        <label style={{ }}>
+        <label >
           <strong>Align Items: </strong>
           <select value={alignItems} onChange={(e) => setAlignItems(e.target.value)}>
             <option value="stretch">Stretch</option>
@@ -84,6 +95,25 @@ function Learning() {
           </select>
         </label>
       </div>
+    <pre style={codeContainer}>
+{`.FlexBoxExperiment {
+    display: 'flex',`}
+    <span style={{fontWeight:"bold",  backgroundColor: '#224422'}}>
+    {`
+
+    flex-direction: '${flexDirection}',
+    justify-content: '${justifyContent}',
+    align-items: '${alignItems}',`}
+    </span>
+    {`
+
+    border: '1px solid',
+    backgroundColor: '#22442244',
+    height: '300px',
+    padding: '10px',
+  }
+    `}
+      </pre>
     </div>
   )
 }
