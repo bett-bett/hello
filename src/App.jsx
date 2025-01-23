@@ -8,27 +8,28 @@ import About from './pages/About';
 import Count from './pages/Count';
 import Hello from './pages/Hello';
 import HomeLayout from './layout/HomeLayout';
-import Learning from './pages/Learning';
+import Learning from './pages/learning/Learning';
+import FlexBoxExperiment from './pages/learning/FlexBoxExperiment';
+// import Lost from './pages/Lost';
 
 
 function App() {
-  
+
   return (
     <>
       <Router>
         <div className='main'>
-          <HomeLayout />
-
-          <div className="body">
-            {/* A <Routes> looks through its children <Route>s and
-                renders the first one that matches the current URL. */}
-            <Routes>
+          <Routes>
+            <Route element={<HomeLayout />} >
+              <Route path="/count" element={<Count/>} />
               <Route path="/about" element={<About/>} />
               <Route path="/count" element={<Count/>} />
               <Route path="/" element={<Hello/>} />
               <Route path="/edu" element={<Learning/>} />
-            </Routes>
-          </div>
+              <Route path="/edu/flex-box-experiment" element={<FlexBoxExperiment/>} />
+              {/* <Route path="*" element={<Lost.jsx/>} /> */}
+            </Route>
+          </Routes>
         </div>
       </Router>
     </>

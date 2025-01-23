@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function Learning() {
+function FlexBoxExperiment() {
   const [flexDirection, setFlexDirection] = useState('row');
   const [justifyContent, setJustifyContent] = useState('flex-start');
   const [alignItems, setAlignItems] = useState('stretch');
@@ -47,9 +47,9 @@ function Learning() {
     else if (flexDirection == "column-reverse") {setAxis('↑')}
     else {setAxis('?')}
   }),[flexDirection]
-  
+
   return (
-    <div className="main-edu">
+    <div>
       <h2>Flexbox Demonstration</h2>
       <p>CSS Flexible Box Layout module (Flexbox) arranges a group of items along a primary axis</p>
       <br></br>
@@ -118,4 +118,4 @@ function Learning() {
   )
 }
 
-export default Learning
+export default FlexBoxExperiment
