@@ -9,3 +9,7 @@ Life long learning
 2. routing and nav
 3. styling, fonts and responsive design
 4. update-readme workflow
+
+### commit replacewithcurrentcommit
+1. Content viewer design
+- Split page

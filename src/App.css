@@ -106,7 +106,12 @@ nav {
   border-bottom: 1px solid #242424 ;
   border-right: 1px solid #242424 ;
   margin: -11px;
-  padding: 21px;
+  padding: 5px 4px 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+  
 }
 
 
@@ -123,6 +128,9 @@ nav {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .main-edu {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 480px) {
