@@ -8,8 +8,7 @@ function Learning() {
   const page1 = {
     position: "relative",
     width: showPage2 ? "100%" : "100%",
-    padding: "12px",
-    margin: "4px",
+    padding: "8px",
     overflow: "auto",
     border: "1px solid #727578",
     transition: "all 0.5s ease",
@@ -18,17 +17,16 @@ function Learning() {
   const page2 = {
     position: "relative",
     width: showPage2 ? "100%" : "0%",
-    padding: showPage2 ? "12px" : "0",
-    margin: showPage2 ? "4px" : "0",
-    overflow: "hidden",
+    padding: showPage2 ? "8px" : "0",
+    overflow: "auto",
     border: showPage2 ? "1px solid #727578" : "none",
     transition: "all 0.5s ease",
   };
 
   const minimizeButton = {
     position: 'absolute',
-    top: '0',
-    right: '0',
+    top: '0.4%',
+    right: '2%',
     fontSize: '20px',
     background: 'none',
     border: 'none',
@@ -47,17 +45,30 @@ function Learning() {
         <h1>Data Vault</h1>
         <p>Ideally, each page holds an individual thought. each thought ..</p>
         <h2>Vault Pages</h2>
-        <h4>CSS</h4>
-        <ul>
-          <li onClick={() => setShowPage2(true)}
-            style={{
-              cursor: "pointer",
-              textDecoration: "underline"
+        <div>         
+          <h4>CSS</h4>
+          <ul>
+            <li onClick={() => setShowPage2(true)}
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline"
               }}
               >
-                CSS flexbox layout
-          </li>  - opens flexbox experiment on the side
-        </ul>
+                  CSS flexbox layout
+            </li>  - opens flexbox experiment on the side
+          </ul>
+          <h4>Test</h4>
+          <ul>
+            <li onClick={() => console.log('coming soon')}
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline"
+                }}
+                >
+                  Rendering Markdown to jsx
+            </li>  - coming soon
+          </ul>
+        </div>
       </div>
       <div style={page2}>
       {showPage2 ?  

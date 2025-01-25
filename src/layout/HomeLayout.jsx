@@ -11,7 +11,7 @@ function HomeLayout() {
       <Header />
       <Tool />
       
-      <div className="body">
+      <div className="main-body">
         <Outlet />
       </div>
       <Analytics/>

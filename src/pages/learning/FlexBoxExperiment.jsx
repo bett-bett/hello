@@ -7,7 +7,7 @@ function FlexBoxExperiment() {
   const [axis, setAxis] = useState('?');
 
 
-  const FlexBoxExperiment = {
+  const FlexBoxExperimentDemo = {
     display: 'flex',
     flexDirection,
     justifyContent,
@@ -55,7 +55,7 @@ function FlexBoxExperiment() {
       <br></br>
       <p>| Experiment with Flexbox properties below:</p>
         <p> | Primary axis {axis}</p>
-      <div style={FlexBoxExperiment}>
+      <div style={FlexBoxExperimentDemo}>
         <div style={boxItem}>Hello</div>
         <div style={boxItem}>internet</div>
         <div style={boxItem}>people</div>

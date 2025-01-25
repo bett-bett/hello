@@ -86,7 +86,7 @@ nav {
   text-align: center;
 }
 
-.body {
+.main-body {
   box-sizing: border-box;
   text-rendering: geometricPrecision;
   border: 1px solid #727578;
@@ -97,7 +97,7 @@ nav {
 
 .main-tool {
   position: fixed;
-  right: 20px;
+  right: 8px;
   bottom: 20px;
 }
 
@@ -106,12 +106,13 @@ nav {
   border-bottom: 1px solid #242424 ;
   border-right: 1px solid #242424 ;
   margin: -11px;
-  padding: 5px 4px 5px;
+  /* margin-bottom: -10.5px; */
+  padding: 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: stretch;
-  
+  gap: 12px
 }
 
 
@@ -130,6 +131,10 @@ nav {
 @media (max-width: 768px) {
   .main-edu {
     flex-direction: column;
+    margin-right: -4px;
+    margin-bottom: -10.5px;
+    margin-bottom: -10.5px;
+    gap: 12px
   }
 }
 
@@ -154,7 +159,7 @@ nav {
   }
 
   .main {
-    padding: 10px;
+    padding: 1px;
   }
 
   .body {
