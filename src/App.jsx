@@ -9,7 +9,7 @@ import Count from './pages/Count';
 import Hello from './pages/Hello';
 import HomeLayout from './layout/HomeLayout';
 import Learning from './pages/learning/Learning';
-import FlexBoxExperiment from './pages/learning/FlexBoxExperiment';
+import FlexBoxExperiment from './pages/learning/leafs/FlexBoxExperiment';
 // import Lost from './pages/Lost';
 
 

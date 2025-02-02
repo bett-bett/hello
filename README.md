@@ -13,3 +13,7 @@ Life long learning
 ### commit replacewithcurrentcommit
 1. Content viewer design
 - Split page
+- render markdown
+  - Issues:
+    - react-markdown does not work with wikilings ```[[foo]]```, I will utilize a lot of wikilinks
+      - solution(instead of my regex solution): remark plugin https://github.com/landakram/remark-wiki-link. observe warning about remark compatibility

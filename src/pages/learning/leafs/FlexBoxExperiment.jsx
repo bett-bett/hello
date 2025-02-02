@@ -64,34 +64,53 @@ function FlexBoxExperiment() {
       <div style={{ display:'flex',  justifyContent:'space-around', flexDirection:'row', marginTop: '6px'}}>
         <label>
           <strong>Flex Direction: </strong>
-          <select value={flexDirection} onChange={(e) => setFlexDirection(e.target.value)}>
+          {/* form field without id and name? come on now, remember the basics */}
+          <select 
+            id="flex-direction"
+            name="flex-direction"
+            value={flexDirection} 
+            onChange={(e) => setFlexDirection(e.target.value)}>
+
             <option value="row">Row</option>
             <option value="row-reverse">Row-Reverse</option>
             <option value="column">Column</option>
             <option value="column-reverse">Column-Reverse</option>
+
           </select>
         </label>
       
         <label >
           <strong>Justify Content: </strong>
-          <select value={justifyContent} onChange={(e) => setJustifyContent(e.target.value)}>
+          <select 
+            id="justifyContent"
+            name="justifyContent"
+            value={justifyContent} 
+            onChange={(e) => setJustifyContent(e.target.value)}>
+
             <option value="flex-start">Flex-Start</option>
             <option value="flex-end">Flex-End</option>
             <option value="center">Center</option>
             <option value="space-between">Space-Between</option>
             <option value="space-around">Space-Around</option>
             <option value="space-evenly">Space-Evenly</option>
+
           </select>
         </label>
 
         <label >
           <strong>Align Items: </strong>
-          <select value={alignItems} onChange={(e) => setAlignItems(e.target.value)}>
+          <select 
+            id="alignItems"
+            name="alignItems"
+            value={alignItems} 
+            onChange={(e) => setAlignItems(e.target.value)}>
+              
             <option value="stretch">Stretch</option>
             <option value="flex-start">Flex-Start</option>
             <option value="flex-end">Flex-End</option>
             <option value="center">Center</option>
             <option value="baseline">Baseline</option>
+            
           </select>
         </label>
       </div>

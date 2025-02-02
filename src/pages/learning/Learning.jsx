@@ -1,9 +1,52 @@
-import { useState } from "react";
-import FlexBoxExperiment from "./FlexBoxExperiment"
+import { useEffect, useState } from "react";
+import VaultPage from "./leafs/VaultPage";
+
 function Learning() {
   const [showPage2, setShowPage2] = useState(false);
+  const [leftLeaf, setLeftLeaf] = useState();
+  const [rightLeaf, setRightLeaf] = useState();
   // const [showGraph, setShowGraph] = useState(true); //sneak peak
 
+  // okay, I want to change how I implement the learning page as I will rendering different data in the page; code components, fetched data(markdown), graphs ...
+  /**
+   * The learning page has a physical book design flex layout with two div items(like book pages - I will call them leafs) side by side or top and bottom for smaller displays
+   * 
+   * handle leaf loading and swapping(exchanging right leaf with left leaf)
+   *    - array of leafs
+   * handle minimizing 
+   * 
+   */
+    
+  // need to make a better implementation, this looks too simple, dont trust it. If you see this, please PR with how you would implement this page. Imagine a book, we are flipping through the pages
+  // ps avoid unnecessary rerendering
+  const addLeaf = (leaf) => {
+    // set new leaf to right leaf if not present and showPage
+    //  if right leaf is present then set rightleaf to left and set newleaf to right
+
+    if (rightLeaf === undefined) {
+      setRightLeaf(leaf);
+      setShowPage2(true)
+      console.log("new right leaf")
+    }
+    else {
+      console.log(rightLeaf)
+
+      setLeftLeaf(rightLeaf);
+      setRightLeaf(leaf);
+      console.log("right present so move right leaf to left and add new leaf")
+
+    }
+  }
+
+  const removeLeaf = (leaf) => {
+    // remove current leaf
+    // if remaining leaf is righ leaf then move to left then setShowPage to false
+
+  }
+  
+  useEffect(() => {
+    setLeftLeaf(<VaultPage newLeaf={addLeaf} />);
+  }, []);
 
   const page1 = {
     position: "relative",
@@ -36,48 +79,39 @@ function Learning() {
 
   return (
     <div className="main-edu">
+      {/* left Leaf */}
       <div style={page1}>
-        <button
+        { showPage2 ?
+          <button
           style={minimizeButton}
-          onClick={() => setShowPage2(false)}
+          onClick={() => {setShowPage2(false) 
+            setTimeout(() => {
+              setRightLeaf(false);
+            }, 500)}}
           > □ </button>
-
-        <h1>Data Vault</h1>
-        <p>Ideally, each page holds an individual thought. each thought ..</p>
-        <h2>Vault Pages</h2>
-        <div>         
-          <h4>CSS</h4>
-          <ul>
-            <li onClick={() => setShowPage2(true)}
-              style={{
-                cursor: "pointer",
-                textDecoration: "underline"
-              }}
-              >
-                  CSS flexbox layout
-            </li>  - opens flexbox experiment on the side
-          </ul>
-          <h4>Test</h4>
-          <ul>
-            <li onClick={() => console.log('coming soon')}
-              style={{
-                cursor: "pointer",
-                textDecoration: "underline"
-                }}
-                >
-                  Rendering Markdown to jsx
-            </li>  - coming soon
-          </ul>
-        </div>
+          // better move on before i continue nit picking on transitions and easing
+          :
+          <>
+          {/* todo: show graph */}
+          </>
+        }
+        
+        <div key="leftleaf">{leftLeaf}</div>
       </div>
+      
+      {/* right Leaf */}
       <div style={page2}>
-      {showPage2 ?  
+      {rightLeaf ?  
         <>
           <button
             style={minimizeButton}
-            onClick={() => setShowPage2(false)}
+            onClick={() => {setShowPage2(false)
+              setTimeout(() => {
+                setRightLeaf(false);
+              }, 500)
+            }}
           > - </button>
-          <FlexBoxExperiment />
+          <div ley="rightleaf">{rightLeaf}</div>
         </>
           :
         <></>
