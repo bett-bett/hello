@@ -14,7 +14,7 @@ function HomeLayout() {
       <div className="main-body">
         <Outlet />
       </div>
-      <Analytics/>
+      {/* <Analytics/> */}
     </div>
   )
 }
