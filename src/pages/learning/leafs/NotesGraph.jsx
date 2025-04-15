@@ -74,14 +74,13 @@ const NotesGraph = () => {
           }))
         ]
 
-        // console.log("nodes:", nodes);
-        // console.log("links:", links);
+        // console.log("nod 
         setGraphData({ nodes, links });
         
         // Add zoomToFit after a delay
         setTimeout(() => {
           if (graphRef.current) {
-            graphRef.current.zoomToFit(1000);
+            graphRef.current.zoomToFit(1000, 50);
           }
         }, 1500);
       } catch (error) {
