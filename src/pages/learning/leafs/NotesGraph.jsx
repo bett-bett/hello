@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
-import { notesService } from '../../../services/notesService ';
 import { useNotes } from "../../../components/Hooks/useNotes";
-import useWindowDimensions from '../../../components/Hooks/useWindowDimensions';
+import { useWindowDimensions } from '../../../components/Hooks/useWindowDimensions';
 
 const NotesGraph = () => {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
   const { fetchNotes, NoteConnections } = useNotes();
   const { width, height } = useWindowDimensions();
+  const graphRef = useRef();
 
   // Calculate responsive width
   const graphWidth = width > 768 ? (width / 2) * 0.87 : width * 0.8;
@@ -57,13 +57,11 @@ const NotesGraph = () => {
             id: `${n.id}`, 
             type: 'note', 
             title: n.title,
-            val: 3
           })),
           ...tagNodes.map(t => ({ 
             id: `tag_${t.id}`, 
             type: 'tag', 
             title: t.name,
-            val: 1
           }))
         ];
 
@@ -79,11 +77,18 @@ const NotesGraph = () => {
         // console.log("nodes:", nodes);
         // console.log("links:", links);
         setGraphData({ nodes, links });
+        
+        // Add zoomToFit after a delay
+        setTimeout(() => {
+          if (graphRef.current) {
+            graphRef.current.zoomToFit(1000);
+          }
+        }, 1500);
       } catch (error) {
         console.error('Error loading graph data:', error);
       }
     };
-    console.log("graphData:", graphData);
+    // console.log("graphData:", graphData);
 
 
     loadGraphData();
@@ -91,26 +96,39 @@ const NotesGraph = () => {
 
   const memoizedGraph = useMemo(() => (
     <ForceGraph2D
+      ref={graphRef}
       graphData={graphData}
       nodeId="id"
       linkSource="source"
       linkTarget="target"
       width={graphWidth}
       height={height * 0.6}
-      backgroundColor="white"
+      backgroundColor="transparent"
       nodeLabel={node => node.title || node.name}
-      nodeAutoColorBy="type"
+      nodeCanvasObject={(node, ctx, globalScale) => {
+        const label = node.title || node.name;
+        const fontSize = 12/globalScale;
+        const nodeSize = node.type === 'note' ? 4 : 3;
+        ctx.font = `${fontSize}px Sans-Serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = node.type === 'note' ? '#e0e0e0' : '#aaafb3';
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.fillStyle = '#727578';
+        ctx.fillText(label, node.x, node.y + nodeSize + 5);
+      }}
       linkDirectionalParticles={2}
       linkDirectionalParticleSpeed={0.005}
-      nodeRelSize={6}
       linkWidth={1}
-      linkColor={() => '#999'}
-      onNodeClick={node => console.log(node)}
-    />
+      linkColor={() => '#888'}
+      nodeRelSize={4}
+      onNodeClick={node => console.log(node)}    />
   ), [graphData, graphWidth, height]);
 
   return (
-    <div >
+    <div>
       <h2>Notes by Tag</h2>
       {memoizedGraph}
     </div>
