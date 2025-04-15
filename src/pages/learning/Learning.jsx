@@ -1,63 +1,107 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import VaultPage from "./leafs/VaultPage";
+import { useNotes } from "../../components/Hooks/useNotes";
+import MarkdownRenderer from "../../components/MarkdownRenderer";
 
 function Learning() {
   const [showPage2, setShowPage2] = useState(false);
   const [leftLeaf, setLeftLeaf] = useState();
   const [rightLeaf, setRightLeaf] = useState();
-  // const [showGraph, setShowGraph] = useState(true); //sneak peak
+  
+  const { notes, error } = useNotes();
 
-  // okay, I want to change how I implement the learning page as I will rendering different data in the page; code components, fetched data(markdown), graphs ...
-  /**
-   * The learning page has a physical book design flex layout with two div items(like book pages - I will call them leafs) side by side or top and bottom for smaller displays
-   * 
-   * handle leaf loading and swapping(exchanging right leaf with left leaf)
-   *    - array of leafs
-   * handle minimizing 
-   * 
-   */
-    
-  // need to make a better implementation, this looks too simple, dont trust it. If you see this, please PR with how you would implement this page. Imagine a book, we are flipping through the pages
-  // ps avoid unnecessary rerendering
-  const addLeaf = (leaf) => {
-    // set new leaf to right leaf if not present and showPage
-    //  if right leaf is present then set rightleaf to left and set newleaf to right
-
+  // Memoized function  add a new leaf
+  const addLeaf = useCallback((newLeaf) => {
     if (rightLeaf === undefined) {
-      setRightLeaf(leaf);
-      setShowPage2(true)
-      console.log("new right leaf")
-    }
-    else {
-      console.log(rightLeaf)
-
+      setRightLeaf(newLeaf);
+      setShowPage2(true);
+    } else {
       setLeftLeaf(rightLeaf);
-      setRightLeaf(leaf);
-      console.log("right present so move right leaf to left and add new leaf")
-
+      setRightLeaf(newLeaf);
     }
-  }
+  }, [rightLeaf]);
 
-  const removeLeaf = (leaf) => {
-    // remove current leaf
-    // if remaining leaf is righ leaf then move to left then setShowPage to false
+  // Function to remove a leaf
+  const removeLeaf = useCallback(() => {
+    setShowPage2(false);
+    setTimeout(() => {
+      setRightLeaf(undefined);
+    }, 500);
+  }, []);
+  
+  // Handle wiki link clicks (when a link in markdown content is clicked)
+  const handleWikiLinkClick = useCallback(async (fileKey) => {
+    console.log("Wiki link clicked. fileKey:", fileKey);
+    
+    try {
+      // get note bu filename
+      const foundNote = notes.find(note => note.filename === fileKey || 
+        note.filename === `${fileKey}.md`);
+      
+      if (foundNote) {
+        // If found in our cache, use it directly
+        addLeaf(
+          <MarkdownRenderer
+            content={foundNote.content}
+            onLinkClick={handleWikiLinkClick}
+          />,
+          foundNote.id
+        );
+        return;
+      }
+      
+      // If not found in cache, try to fetch by filename from the database
+      const { getNoteByFilename } = notesService;
+      const noteData = await getNoteByFilename(fileKey);
+      
+      if (noteData) {
+        addLeaf(
+          <MarkdownRenderer
+            content={noteData.content}
+            onLinkClick={handleWikiLinkClick}
+          />,
+          noteData.id
+        );
+      } else {
+        addLeaf(
+          <div className="note-not-found">
+            <h2>Note "{fileKey}" not found</h2>
+            <p>This wiki link points to a note that doesn't exist yet. Maybe it is just a tag and the dev needs to work on new features</p>
+          
+          </div>
+        );
+      }
+    } catch (error) {
+      console.error("Error handling wiki link:", error);
+      addLeaf(
+        <div className="error-message">
+          <h2>Error loading note</h2>
+          <p>{error.message}</p>
+        </div>
+      );
+    }
+  }, [notes, addLeaf]);
 
-  }
   
   useEffect(() => {
-    setLeftLeaf(<VaultPage newLeaf={addLeaf} />);
-  }, []);
+    if (!leftLeaf) {
+      setLeftLeaf(<VaultPage 
+        newLeaf={addLeaf} 
+      />);
+    }
+  }, [leftLeaf]);
 
-  const page1 = {
+
+  const page1Style = {
     position: "relative",
-    width: showPage2 ? "100%" : "100%",
+    width: "100%",
     padding: "8px",
     overflow: "auto",
     border: "1px solid #727578",
     transition: "all 0.5s ease",
   };
 
-  const page2 = {
+  const page2Style = {
     position: "relative",
     width: showPage2 ? "100%" : "0%",
     padding: showPage2 ? "8px" : "0",
@@ -80,45 +124,44 @@ function Learning() {
   return (
     <div className="main-edu">
       {/* left Leaf */}
-      <div style={page1}>
-        { showPage2 ?
+      <div style={page1Style}>
+        {showPage2 ? (
           <button
-          style={minimizeButton}
-          onClick={() => {setShowPage2(false) 
-            setTimeout(() => {
-              setRightLeaf(false);
-            }, 500)}}
+            style={minimizeButton}
+            onClick={removeLeaf}
           > □ </button>
-          // better move on before i continue nit picking on transitions and easing
-          :
+        ) : (
           <>
           {/* todo: show graph */}
           </>
-        }
+        )}
         
         <div key="leftleaf">{leftLeaf}</div>
       </div>
       
       {/* right Leaf */}
-      <div style={page2}>
-      {rightLeaf ?  
-        <>
-          <button
-            style={minimizeButton}
-            onClick={() => {setShowPage2(false)
-              setTimeout(() => {
-                setRightLeaf(false);
-              }, 500)
-            }}
-          > - </button>
-          <div ley="rightleaf">{rightLeaf}</div>
-        </>
-          :
-        <></>
-      }
+      <div style={page2Style}>
+        {rightLeaf ? (
+          <>
+            <button
+              style={minimizeButton}
+              onClick={removeLeaf}
+            > - </button>
+            <div key="rightleaf">{rightLeaf}</div>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
+      
+      {/* Display error message if there's an error fetching notes */}
+      {error && (
+        <div style={{ color: 'red', padding: '10px' }}>
+          Error: {error}
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default Learning
+export default Learning;
