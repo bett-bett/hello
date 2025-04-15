@@ -1,27 +1,10 @@
 import React from 'react'
 import FlexBoxExperiment from './FlexBoxExperiment'
 import MarkdownRenderer from '../../../components/MarkdownRenderer'
+import NotesGraph from './NotesGraph'
 
-import mdLeaf from '../../../assets/new/testing.md'
+// Landing page for the vault. 1st leaf
 function VaultPage({newLeaf}) {
-  // test . inconclusive
-  // const handleWikiLinkClick = (fileKey) => {
-  //   console.log("Wiki link clicked. fileKey:", fileKey);
-  //   import(`../../../assets/new/${fileKey}.md`)
-  //     .then((module) => {
-  //       const newContent = module.default;
-  //       newLeaf(
-  //         <MarkdownRenderer
-  //           content={newContent}
-  //           onLinkClick={handleWikiLinkClick}
-  //         />
-  //       );
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error loading markdown file:", error);
-  //     });
-  // };
-
   return (
     <div>
       <h1>Data Vault</h1>
@@ -45,13 +28,15 @@ function VaultPage({newLeaf}) {
           <ul>
           
 
-            <li onClick={() => newLeaf(<MarkdownRenderer content={mdLeaf} onLinkClick={handleWikiLinkClick}/>)}
+            {/* <li onClick={() => newLeaf()} */}
+            {/* <MarkdownRenderer content={mdLeaf} onLinkClick={handleWikiLinkClick}/> */}
+            <li onClick={() => newLeaf(<NotesGraph />)}
               style={{
                 cursor: "pointer",
                 textDecoration: "underline"
                 }}
                 >
-                  Rendering Markdown to jsx
+                  Table of Content
             </li>  - coming soon
           </ul>
         </div>
