@@ -55,8 +55,9 @@ const NotesGraph = () => {
         const nodes = [
           ...notes.map(n => ({ 
             id: `${n.id}`, 
-            type: 'note', 
+            type: n.type || 'note', 
             title: n.title,
+            url: n.url || ''
           })),
           ...tagNodes.map(t => ({ 
             id: `tag_${t.id}`, 
@@ -74,7 +75,8 @@ const NotesGraph = () => {
           }))
         ]
 
-        // console.log("nod 
+        // console.log("nodes:", nodes);
+        // console.log("links:", links);
         setGraphData({ nodes, links });
         
         // Add zoomToFit after a delay
@@ -87,7 +89,7 @@ const NotesGraph = () => {
         console.error('Error loading graph data:', error);
       }
     };
-    // console.log("graphData:", graphData);
+    console.log("graphData:", graphData);
 
 
     loadGraphData();
@@ -106,12 +108,13 @@ const NotesGraph = () => {
       nodeLabel={node => node.title || node.name}
       nodeCanvasObject={(node, ctx, globalScale) => {
         const label = node.title || node.name;
-        const fontSize = 12/globalScale;
+        const fontSize = 11/globalScale;
         const nodeSize = node.type === 'note' ? 4 : 3;
         ctx.font = `${fontSize}px Sans-Serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = node.type === 'note' ? '#e0e0e0' : '#aaafb3';
+        ctx.fillStyle = node.type === 'web-app' ? 'rgba(88, 173, 107, 0.6)' : 
+                       node.type === 'note' ? '#e0e0e0' : '#aaafb3';
         ctx.beginPath();
         ctx.arc(node.x, node.y, nodeSize, 0, 2 * Math.PI);
         ctx.fill();
@@ -123,7 +126,13 @@ const NotesGraph = () => {
       linkWidth={1}
       linkColor={() => '#888'}
       nodeRelSize={4}
-      onNodeClick={node => console.log(node)}    />
+      onNodeClick={node => {
+        console.log(node)
+        if (node.type === 'web-app') {
+          window.open(node.url, '_blank');
+        }
+      }}
+      />
   ), [graphData, graphWidth, height]);
 
   return (
